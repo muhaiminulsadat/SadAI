@@ -3,6 +3,8 @@ import dotenv from "dotenv";
 import proxy from "express-http-proxy";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import {authMiddleware} from "./middleware/authMiddleware.ts";
+import proxyWithHeader from "./utils/proxyHeader.ts";
 
 dotenv.config();
 
@@ -21,6 +23,7 @@ app.use(
   }),
 );
 
+// ─── Public routes (no auth required) ───────────────────────────────────────
 app.use(
   "/api/v1/auth",
   proxy(process.env.AUTH_SERVICE_URL!, {
@@ -28,11 +31,17 @@ app.use(
   }),
 );
 
+// ─── Protected routes (session required) ────────────────────────────────────
 app.use(
-  "/api/auth",
-  proxy(process.env.AUTH_SERVICE_URL!, {
-    proxyReqPathResolver: (req) => req.originalUrl,
-  }),
+  "/api/v1/chat",
+  authMiddleware,
+  proxyWithHeader(process.env.CHAT_SERVICE_URL!),
+);
+
+app.use(
+  "/api/v1/agent",
+  authMiddleware,
+  proxyWithHeader(process.env.AGENT_SERVICE_URL!),
 );
 
 app.get("/", (_req, res) => {

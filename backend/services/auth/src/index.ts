@@ -2,8 +2,8 @@ import express from "express";
 import dotenv from "dotenv";
 import connectDB from "./config/db.ts";
 import authRoutes from "./routes/auth.routes.ts";
-import { toNodeHandler } from "better-auth/node";
-import { auth } from "./config/auth.ts";
+import {toNodeHandler} from "better-auth/node";
+import {auth} from "./config/auth.ts";
 
 dotenv.config();
 

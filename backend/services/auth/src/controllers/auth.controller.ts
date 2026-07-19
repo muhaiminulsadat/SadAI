@@ -1,10 +1,10 @@
-import { Request, Response } from "express";
-import { auth } from "../config/auth.ts";
+import {Request, Response} from "express";
+import {auth} from "../config/auth.ts";
 
 const forwardBetterAuthResponse = async (
   betterAuthResponse: globalThis.Response,
   res: Response,
-  successMessage: string = "Operation successful"
+  successMessage: string = "Operation successful",
 ): Promise<Response> => {
   const setCookies = betterAuthResponse.headers.getSetCookie();
   if (setCookies && setCookies.length > 0) {
@@ -52,9 +52,12 @@ const forwardBetterAuthResponse = async (
   }
 };
 
-export const register = async (req: Request, res: Response): Promise<Response> => {
+export const register = async (
+  req: Request,
+  res: Response,
+): Promise<Response> => {
   try {
-    const { email, password, name } = req.body;
+    const {email, password, name} = req.body;
 
     if (!email || !password || !name) {
       return res.status(400).json({
@@ -65,7 +68,7 @@ export const register = async (req: Request, res: Response): Promise<Response> =
     }
 
     const response = await auth.api.signUpEmail({
-      body: { email, password, name },
+      body: {email, password, name},
       asResponse: true,
       headers: req.headers as any,
     });
@@ -82,7 +85,7 @@ export const register = async (req: Request, res: Response): Promise<Response> =
 
 export const login = async (req: Request, res: Response): Promise<Response> => {
   try {
-    const { email, password } = req.body;
+    const {email, password} = req.body;
 
     if (!email || !password) {
       return res.status(400).json({
@@ -93,7 +96,7 @@ export const login = async (req: Request, res: Response): Promise<Response> => {
     }
 
     const response = await auth.api.signInEmail({
-      body: { email, password },
+      body: {email, password},
       asResponse: true,
       headers: req.headers as any,
     });
@@ -108,7 +111,10 @@ export const login = async (req: Request, res: Response): Promise<Response> => {
   }
 };
 
-export const logout = async (req: Request, res: Response): Promise<Response> => {
+export const logout = async (
+  req: Request,
+  res: Response,
+): Promise<Response> => {
   try {
     const response = await auth.api.signOut({
       asResponse: true,

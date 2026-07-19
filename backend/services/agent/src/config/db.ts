@@ -15,9 +15,9 @@ export const db = client.db();
 const connectDB = async () => {
   try {
     await mongoose.connect(mongoURI);
-    console.log("Database connected successfully");
+    console.log("Database connected successfully from Agent Service");
   } catch (error: any) {
-    console.log("Database connection error", error.message);
+    console.log("Database connection error from Agent Service", error.message);
     process.exit(1);
   }
 };

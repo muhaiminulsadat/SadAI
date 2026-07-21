@@ -1,5 +1,5 @@
 services:
-  # Frontend Static Site
+  # Frontend Static Site (Always Free)
   - type: web
     name: sadai-frontend
     runtime: static
@@ -13,6 +13,7 @@ services:
   - type: web
     name: sadai-gateway
     env: node
+    plan: free
     rootDir: backend/gateway
     buildCommand: npm install
     startCommand: npm start
@@ -30,6 +31,7 @@ services:
   - type: web
     name: sadai-auth
     env: node
+    plan: free
     rootDir: backend/services/auth
     buildCommand: npm install
     startCommand: npm start
@@ -45,6 +47,7 @@ services:
   - type: web
     name: sadai-chat
     env: node
+    plan: free
     rootDir: backend/services/chat
     buildCommand: npm install
     startCommand: npm start
@@ -58,6 +61,7 @@ services:
   - type: web
     name: sadai-agent
     env: node
+    plan: free
     rootDir: backend/services/agent
     buildCommand: npm install
     startCommand: npm start

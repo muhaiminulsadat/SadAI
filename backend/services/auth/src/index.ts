@@ -5,15 +5,23 @@ import authRoutes from "./routes/auth.routes.ts";
 import {toNodeHandler} from "better-auth/node";
 import {auth} from "./config/auth.ts";
 
+import cors from "cors";
+
 dotenv.config();
 
 const port = process.env.PORT;
 
 const app = express();
 
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL || "http://localhost:5173",
+    credentials: true,
+  }),
+);
 app.use(express.json());
 
-app.all("/api/auth/{*path}", toNodeHandler(auth));
+app.all("/api/auth/*path", toNodeHandler(auth));
 
 app.get("/api/v1/auth", (_req, res) => {
   res.send("Auth Service is running");

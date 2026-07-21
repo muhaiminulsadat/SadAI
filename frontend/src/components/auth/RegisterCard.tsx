@@ -60,7 +60,10 @@ export const RegisterCard: React.FC<RegisterCardProps> = ({ onSwitchToLogin }) =
         },
         onError: (ctx) => {
           setLoading(false);
-          const msg = ctx.error.message || "Failed to create account. Email may already be in use.";
+          const msg =
+            ctx.error.message ||
+            ctx.error.statusText ||
+            "Failed to create account. Please check backend service.";
           setError(msg);
           toast.error(msg);
         },

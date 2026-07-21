@@ -14,4 +14,4 @@
 6. **Notifications**: Use `react-hot-toast` for actions (auth, errors, etc.). Mount `<Toaster />` globally at app root (`App.tsx`).
 7. **State Sync**: In login/register/logout, dispatch `setUserData` immediately on success. Do not wait for hooks (e.g., `useSession`) to resolve.
 8. **API Response Format**: All HTTP responses must follow a consistent structure: `{ success: boolean, message: string, data?: any }`.
-
+9. **No Unnecessary Comments**: Do not write redundant or obvious comments. Code should be self-documenting, and comments should only explain non-obvious details or complex logic.

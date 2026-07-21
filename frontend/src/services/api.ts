@@ -1,0 +1,15 @@
+import axios from "axios";
+
+export const api = axios.create({
+  baseURL: "http://localhost:8000",
+  withCredentials: true,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
+
+export interface ApiResponse<T = any> {
+  success: boolean;
+  message: string;
+  data?: T;
+}

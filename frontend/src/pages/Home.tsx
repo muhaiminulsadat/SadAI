@@ -1,6 +1,6 @@
 import React from "react";
 import { useAppSelector } from "../redux/hooks";
-import { HomeDashboard } from "../components/dashboard/HomeDashboard";
+import { ChatLayout } from "../components/chat/ChatLayout";
 import { AuthView } from "../components/auth/AuthView";
 
 export const Home: React.FC = () => {
@@ -23,7 +23,7 @@ export const Home: React.FC = () => {
   }
 
   if (user) {
-    return <HomeDashboard />;
+    return <ChatLayout />;
   }
 
   return <AuthView />;

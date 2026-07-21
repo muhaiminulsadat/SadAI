@@ -5,7 +5,7 @@ import chatRoutes from "./routes/chat.routes.ts";
 
 dotenv.config();
 
-const port = process.env.PORT;
+const port = process.env.PORT || 8002;
 
 const app = express();
 

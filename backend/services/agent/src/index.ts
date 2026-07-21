@@ -5,7 +5,7 @@ import agentRouter from "./routes/agent.route.ts";
 
 dotenv.config();
 
-const port = process.env.PORT;
+const port = process.env.PORT || 8003;
 
 const app = express();
 

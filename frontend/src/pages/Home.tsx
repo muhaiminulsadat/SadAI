@@ -1,10 +1,10 @@
 import React from "react";
-import { useAppSelector } from "../redux/hooks";
-import { ChatLayout } from "../components/chat/ChatLayout";
-import { AuthView } from "../components/auth/AuthView";
+import {useAppSelector} from "../redux/hooks";
+import {ChatLayout} from "../components/chat/ChatLayout";
+import {AuthView} from "../components/auth/AuthView";
 
 export const Home: React.FC = () => {
-  const { user, isPending } = useAppSelector((s) => s.user);
+  const {user, isPending} = useAppSelector((s) => s.user);
 
   if (isPending) {
     return (

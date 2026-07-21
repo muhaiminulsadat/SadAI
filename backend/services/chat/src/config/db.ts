@@ -1,6 +1,14 @@
 import mongoose from "mongoose";
 import {MongoClient} from "mongodb";
 import dotenv from "dotenv";
+import dns from "node:dns";
+
+dns.setDefaultResultOrder("ipv4first");
+try {
+  dns.setServers(["8.8.8.8", "1.1.1.1"]);
+} catch (e) {
+  console.warn("Could not set custom DNS servers:", e);
+}
 
 dotenv.config();
 

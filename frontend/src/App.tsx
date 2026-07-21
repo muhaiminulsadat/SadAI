@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
-import { useSession } from "./lib/auth-client";
-import { useAppDispatch } from "./redux/hooks";
-import { setUserData, setIsPending } from "./redux/slices/user.slice";
-import { Home } from "./pages/Home";
-import { Toaster } from "react-hot-toast";
+import React, {useEffect} from "react";
+import {useSession} from "./lib/auth-client";
+import {useAppDispatch} from "./redux/hooks";
+import {setUserData, setIsPending} from "./redux/slices/user.slice";
+import {Home} from "./pages/Home";
+import {Toaster} from "react-hot-toast";
 
 /**
  * App is the single session bridge: useSession fires one network call,
@@ -11,7 +11,7 @@ import { Toaster } from "react-hot-toast";
  * Nothing else in the tree calls useSession or authClient.getSession().
  */
 const App: React.FC = () => {
-  const { data: session, isPending: sessionLoading } = useSession();
+  const {data: session, isPending: sessionLoading} = useSession();
   const dispatch = useAppDispatch();
 
   // Reflect session loading state into Redux immediately

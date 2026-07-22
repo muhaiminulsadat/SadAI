@@ -7,8 +7,7 @@ const conversationSchema = new mongoose.Schema({
     default: "New Conversation",
   },
   userId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
+    type: String,
     required: true,
   },
   messages: [
@@ -17,6 +16,8 @@ const conversationSchema = new mongoose.Schema({
       ref: "Message",
     },
   ],
+}, {
+  timestamps: true,
 });
 
 const Conversation = mongoose.model("Conversation", conversationSchema);

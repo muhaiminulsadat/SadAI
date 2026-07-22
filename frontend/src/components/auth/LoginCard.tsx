@@ -4,7 +4,7 @@ import {Loader2, ArrowRight} from "lucide-react";
 import {Button} from "../ui/button";
 import toast from "react-hot-toast";
 import {useAppDispatch} from "@/redux/hooks";
-import {setUserData} from "@/redux/slices/user.slice";
+import {setUserData, sanitizeUserData} from "@/redux/slices/user.slice";
 
 interface LoginCardProps {
   onSwitchToRegister: () => void;
@@ -37,7 +37,7 @@ export const LoginCard: React.FC<LoginCardProps> = ({onSwitchToRegister}) => {
           setLoading(false);
           toast.success("Welcome back!");
           if (ctx.data?.user) {
-            dispatch(setUserData(ctx.data.user));
+            dispatch(setUserData(sanitizeUserData(ctx.data.user)));
           }
         },
         onError: (ctx) => {

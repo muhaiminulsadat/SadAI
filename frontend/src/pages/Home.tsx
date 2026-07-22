@@ -1,10 +1,14 @@
 import React from "react";
-import {useAppSelector} from "../redux/hooks";
-import {ChatLayout} from "../components/chat/ChatLayout";
-import {AuthView} from "../components/auth/AuthView";
+import { useAppSelector } from "../redux/hooks";
+
+import { AuthView } from "../components/auth/AuthView";
+import SideBar from "@/components/chat/sidebar/SideBar";
+import ChatArea from "@/components/chat/ChatArea";
+import Artifact from "@/components/chat/Artifact";
+import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 
 export const Home: React.FC = () => {
-  const {user, isPending} = useAppSelector((s) => s.user);
+  const { user, isPending } = useAppSelector((s) => s.user);
 
   if (isPending) {
     return (
@@ -23,8 +27,19 @@ export const Home: React.FC = () => {
   }
 
   if (user) {
-    return <ChatLayout />;
+    return (
+      <SidebarProvider>
+        <div className="flex h-screen w-full overflow-hidden bg-background text-foreground bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-500/5 via-background to-background">
+          <SideBar />
+          <SidebarInset className="flex flex-1 overflow-hidden relative">
+            <ChatArea />
+            <Artifact />
+          </SidebarInset>
+        </div>
+      </SidebarProvider>
+    );
   }
 
   return <AuthView />;
 };
+

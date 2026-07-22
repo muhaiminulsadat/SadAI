@@ -1,16 +1,18 @@
-import React, { useState } from "react";
-import { signUp } from "../../lib/auth-client";
-import { Loader2, ArrowRight } from "lucide-react";
-import { Button } from "../ui/button";
+import React, {useState} from "react";
+import {signUp} from "../../lib/auth-client";
+import {Loader2, ArrowRight} from "lucide-react";
+import {Button} from "../ui/button";
 import toast from "react-hot-toast";
-import { useAppDispatch } from "@/redux/hooks";
-import { setUserData } from "@/redux/slices/user.slice";
+import {useAppDispatch} from "@/redux/hooks";
+import {setUserData, sanitizeUserData} from "@/redux/slices/user.slice";
 
 interface RegisterCardProps {
   onSwitchToLogin: () => void;
 }
 
-export const RegisterCard: React.FC<RegisterCardProps> = ({ onSwitchToLogin }) => {
+export const RegisterCard: React.FC<RegisterCardProps> = ({
+  onSwitchToLogin,
+}) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -55,7 +57,7 @@ export const RegisterCard: React.FC<RegisterCardProps> = ({ onSwitchToLogin }) =
           setLoading(false);
           toast.success("Account created successfully!");
           if (ctx.data?.user) {
-            dispatch(setUserData(ctx.data.user));
+            dispatch(setUserData(sanitizeUserData(ctx.data.user)));
           }
         },
         onError: (ctx) => {

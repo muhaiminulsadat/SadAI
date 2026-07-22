@@ -5,8 +5,35 @@ export interface UserData {
   name: string;
   email?: string;
   emailVerified: boolean;
-  createdAt?: Date | string;
+  createdAt?: string;
+  updatedAt?: string;
+  image?: string | null;
 }
+
+export type UserDataInput = Omit<UserData, "createdAt" | "updatedAt"> & {
+  createdAt?: Date | string;
+  updatedAt?: Date | string;
+};
+
+export const sanitizeUserData = (
+  input: UserDataInput | null | undefined
+): UserData | null => {
+  if (!input) return null;
+  const { createdAt, updatedAt, ...rest } = input;
+  return {
+    ...rest,
+    createdAt: createdAt
+      ? createdAt instanceof Date
+        ? createdAt.toISOString()
+        : String(createdAt)
+      : undefined,
+    updatedAt: updatedAt
+      ? updatedAt instanceof Date
+        ? updatedAt.toISOString()
+        : String(updatedAt)
+      : undefined,
+  };
+};
 
 interface UserState {
   user: UserData | null;

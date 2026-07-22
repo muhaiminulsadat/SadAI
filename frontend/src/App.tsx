@@ -1,7 +1,7 @@
 import React, {useEffect} from "react";
 import {useSession} from "./lib/auth-client";
 import {useAppDispatch} from "./redux/hooks";
-import {setUserData, setIsPending} from "./redux/slices/user.slice";
+import {setUserData, setIsPending, sanitizeUserData} from "./redux/slices/user.slice";
 import {Home} from "./pages/Home";
 import {Toaster} from "react-hot-toast";
 
@@ -24,7 +24,7 @@ const App: React.FC = () => {
   // Sync resolved session → Redux (one place, no component duplication)
   useEffect(() => {
     if (!sessionLoading) {
-      dispatch(setUserData(session?.user ?? null));
+      dispatch(setUserData(sanitizeUserData(session?.user)));
     }
   }, [session, sessionLoading, dispatch]);
 

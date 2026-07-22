@@ -9,6 +9,9 @@ const port = process.env.PORT || 8002;
 
 const app = express();
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 app.get("/", (_req, res) => {
   res.send("Hello from chat!");
 });

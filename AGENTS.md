@@ -10,7 +10,7 @@
 2. **Load States**: Prevent layout shifts using spinners (dual-ring overlay: `animate-pulse` + `animate-spin` borders) and skeletons during loading/session checks.
 3. **Visual Depth**: Use glassmorphism (`bg-card/40 backdrop-blur-md`), grid overlay patterns, and radial gradients (`bg-[radial-gradient(ellipse_...)]`). No flat monotone styles.
 4. **TypeScript Safety**: Match custom states/interfaces (e.g., `UserState`, `DashboardProps`) with external auth schemas (e.g., Better Auth) via optional properties (`email?: string`). No `any` casting or fallback strings.
-5. **Anti-AI Design**: Human-designed look. Avoid generic templates, repetitive elements, and decorative clutter. Use standard Shadcn components and native Tailwind classes. No custom Tailwind configs or raw CSS.
+5. **Anti-AI Design & UI Components**: Always use shadcn component blocks instead of raw Tailwind CSS. Install components via CLI (e.g. `npx shadcn@latest add`) before using; do not rewrite or build custom layouts from scratch with raw Tailwind CSS.
 6. **Notifications**: Use `react-hot-toast` for actions (auth, errors, etc.). Mount `<Toaster />` globally at app root (`App.tsx`).
 7. **State Sync**: In login/register/logout, dispatch `setUserData` immediately on success. Do not wait for hooks (e.g., `useSession`) to resolve.
 8. **API Response Format**: All HTTP responses must follow a consistent structure: `{ success: boolean, message: string, data?: any }`.

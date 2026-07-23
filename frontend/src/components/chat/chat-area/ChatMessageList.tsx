@@ -45,6 +45,16 @@ export const ChatMessageList: React.FC<ChatMessageListProps> = ({
   userName,
   onSelectPrompt,
 }) => {
+  const messagesEndRef = React.useRef<HTMLDivElement>(null);
+
+  const scrollToBottom = React.useCallback(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, []);
+
+  React.useEffect(() => {
+    scrollToBottom();
+  }, [messages.length, isSending, scrollToBottom]);
+
   if (isLoading) {
     return (
       <div className="flex flex-1 flex-col gap-6 p-4 max-w-4xl mx-auto w-full">
@@ -76,14 +86,14 @@ export const ChatMessageList: React.FC<ChatMessageListProps> = ({
               <MessageScrollerItem
                 key={msg._id || `msg-${idx}-${msg.role}-${msg.content.slice(0, 10)}`}
                 messageId={msg._id || `msg-${idx}`}
-                scrollAnchor={msg.role === "user"}
+                scrollAnchor={idx === deduplicated.length - 1}
               >
                 <ChatMessageItem message={msg} userName={userName} />
               </MessageScrollerItem>
             ))}
 
             {isSending && (
-              <MessageScrollerItem messageId="thinking">
+              <MessageScrollerItem messageId="thinking" scrollAnchor={true}>
                 <div className="flex items-end gap-2 px-2 sm:px-4">
                   <div className="size-7 shrink-0 rounded-full bg-muted flex items-center justify-center">
                     <div className="size-2 rounded-full bg-muted-foreground/40 animate-pulse" />
@@ -99,6 +109,7 @@ export const ChatMessageList: React.FC<ChatMessageListProps> = ({
                 </div>
               </MessageScrollerItem>
             )}
+            <div ref={messagesEndRef} className="h-px w-full" />
           </MessageScrollerContent>
         </MessageScrollerViewport>
 

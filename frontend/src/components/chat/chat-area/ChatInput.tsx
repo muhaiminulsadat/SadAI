@@ -3,9 +3,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { ArrowUp, Paperclip, Code, Loader2 } from "lucide-react";
+import { AgentModeSelector, type AgentMode } from "./AgentModeSelector";
 
 interface ChatInputProps {
-  onSendMessage: (content: string) => void;
+  onSendMessage: (content: string, mode?: AgentMode) => void;
   isSending: boolean;
   disabled?: boolean;
 }
@@ -16,6 +17,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({
   disabled,
 }) => {
   const [content, setContent] = useState("");
+  const [selectedMode, setSelectedMode] = useState<AgentMode>("auto");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   // Auto-grow textarea
@@ -33,7 +35,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({
     if (e) e.preventDefault();
     const trimmed = content.trim();
     if (!trimmed || isSending || disabled) return;
-    onSendMessage(trimmed);
+    onSendMessage(trimmed, selectedMode);
     setContent("");
     if (textareaRef.current) {
       textareaRef.current.style.height = "auto";
@@ -49,6 +51,11 @@ export const ChatInput: React.FC<ChatInputProps> = ({
 
   return (
     <div className="w-full max-w-4xl mx-auto p-3 sm:p-4 bg-transparent shrink-0 z-10">
+      <AgentModeSelector
+        selectedMode={selectedMode}
+        onSelectMode={setSelectedMode}
+        disabled={disabled || isSending}
+      />
       <form
         onSubmit={handleSubmit}
         className="relative flex flex-col rounded-2xl border border-border/70 bg-card/80 backdrop-blur-2xl shadow-xl shadow-black/5 focus-within:ring-2 focus-within:ring-primary/20 focus-within:border-primary/50 transition-all duration-200 ease-out overflow-hidden"

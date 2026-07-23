@@ -14,4 +14,7 @@
 6. **Notifications**: Use `react-hot-toast` for actions (auth, errors, etc.). Mount `<Toaster />` globally at app root (`App.tsx`).
 7. **State Sync**: In login/register/logout, dispatch `setUserData` immediately on success. Do not wait for hooks (e.g., `useSession`) to resolve.
 8. **API Response Format**: All HTTP responses must follow a consistent structure: `{ success: boolean, message: string, data?: any }`.
-9. **No Unnecessary Comments**: Do not write redundant or obvious comments. Code should be self-documenting, and comments should only explain non-obvious details or complex logic.
+9. **Beginner Step-by-Step Learning Workflow**: Always break code implementation into small, clear steps. Explain each step simply for a beginner developer, and wait for user review & explicit approval before proceeding to the next step.
+10. **Strict shadcn UI Component Usage**: Always follow `/shadcn` standards. Install primitives via CLI (e.g., `npx shadcn@latest add <component>`) and compose using official shadcn components (e.g., `ToggleGroup`, `Tooltip`, `Card`). Never write raw HTML/Tailwind loops or AI-slop patterns when shadcn UI components exist.
+11. **High-Contrast Active States**: Ensure active/selected states have strong contrast and visibility (e.g., explicit `data-[state=on]:bg-primary` & `data-[state=on]:text-primary-foreground`) so active options are clearly visible in both light and dark modes.
+12. **Always Use shadcn Components**: Do not create custom CSS/Tailwind components unless the component is unavailable in shadcn/ui. Always prefer official shadcn components like `ToggleGroup`, `Tooltip`, `Card`, etc. for UI elements.

@@ -5,7 +5,8 @@ import {getConversationHistory} from "../lib/memory.ts";
 
 export const agent = async (req: Request, res: Response) => {
   try {
-    const { prompt, conversationId } = req.body;
+    const {prompt, conversationId, agent: selectedAgent, mode} = req.body;
+    const targetAgent = selectedAgent || mode || "auto";
 
     if (!prompt || !conversationId) {
       return res.status(400).json({
@@ -17,31 +18,40 @@ export const agent = async (req: Request, res: Response) => {
     const envUrl = process.env.CHAT_SERVICE_URL?.trim();
     const chatServiceUrl = envUrl || "http://chat-service:8002";
 
-    const saveChatMessage = async (role: "user" | "assistant", content: string) => {
+    const saveChatMessage = async (
+      role: "user" | "assistant",
+      content: string,
+      images?: string[],
+    ) => {
       try {
         await axios.post(`${chatServiceUrl}/api/v1/chat/save-message`, {
           content,
           conversationId,
           role,
+          images: images || [],
         });
       } catch (err: any) {
         if (chatServiceUrl !== "http://localhost:8002") {
           try {
-            await axios.post(`http://localhost:8002/api/v1/chat/save-message`, {
-              content,
-              conversationId,
-              role,
-            });
+            await axios.post(
+              `http://localhost:8002/api/v1/chat/save-message`,
+              {
+                content,
+                conversationId,
+                role,
+                images: images || [],
+              },
+            );
           } catch (fallbackErr: any) {
             console.error(
               `[AgentController] ${role} message save fallback error:`,
-              fallbackErr?.message
+              fallbackErr?.message,
             );
           }
         } else {
           console.error(
             `[AgentController] ${role} message save warning:`,
-            err?.message
+            err?.message,
           );
         }
       }
@@ -53,26 +63,31 @@ export const agent = async (req: Request, res: Response) => {
     // 2. Save user message to chat service
     await saveChatMessage("user", prompt);
 
-    // 3. Invoke AI agent graph with prompt, conversationId, and history
+    // 3. Invoke AI agent graph with prompt, conversationId, agent, and history
     const result = await graph.invoke({
       prompt,
       conversationId,
+      agent: targetAgent,
       history,
     });
 
     const aiResponse = result?.aiResponse || "No response generated.";
+    const images = Array.isArray(result?.images) ? result.images : [];
 
-    // 4. Save assistant message to chat service
-    await saveChatMessage("assistant", aiResponse);
+    // 4. Save assistant message with content and images to chat service
+    await saveChatMessage("assistant", aiResponse, images);
 
     return res.status(200).json({
       success: true,
       message: "Agent executed successfully",
-      data: aiResponse,
+      data: {
+        aiResponse,
+        images,
+      },
     });
   } catch (error) {
     const message =
       error instanceof Error ? error.message : "Internal server agent error";
-    return res.status(500).json({ success: false, message });
+    return res.status(500).json({success: false, message});
   }
 };

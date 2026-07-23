@@ -15,6 +15,7 @@ import toast from "react-hot-toast";
 import { ChatHeader } from "./ChatHeader";
 import { ChatMessageList } from "./ChatMessageList";
 import { ChatInput } from "./ChatInput";
+import type { AgentMode } from "./AgentModeSelector";
 
 export const MainChatArea: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -57,7 +58,7 @@ export const MainChatArea: React.FC = () => {
   }, [selectedConversation, dispatch]);
 
   const handleSendMessage = useCallback(
-    async (content: string) => {
+    async (content: string, mode?: AgentMode) => {
       let currentConvoId = selectedConversation;
 
       // If no conversation selected, create one automatically
@@ -90,31 +91,31 @@ export const MainChatArea: React.FC = () => {
       dispatch(setIsSendingMessage(true));
 
       try {
-        // 1. Explicitly save user message to MongoDB
-        await chatService.saveMessage({
-          conversationId: currentConvoId,
-          role: "user",
-          content,
-        });
-
-        // 2. Send prompt to AI agent graph service (generates & saves AI response)
+        // Send prompt with selected agent to AI service (which saves user prompt & assistant response)
         const agentRes = await chatService.sendAgentPrompt({
           prompt: content,
           conversationId: currentConvoId,
+          agent: mode || "auto",
         });
 
         if (agentRes.success && agentRes.data) {
-          // Explicitly save AI assistant response to MongoDB
-          await chatService.saveMessage({
-            conversationId: currentConvoId,
-            role: "assistant",
-            content: agentRes.data,
-          });
+          let responseContent = "";
+          let responseImages: string[] = [];
+
+          if (typeof agentRes.data === "string") {
+            responseContent = agentRes.data;
+          } else if (typeof agentRes.data === "object" && agentRes.data !== null) {
+            responseContent = agentRes.data.aiResponse || "";
+            responseImages = Array.isArray(agentRes.data.images)
+              ? agentRes.data.images
+              : [];
+          }
 
           const assistantMsg = {
             conversationId: currentConvoId,
             role: "assistant" as const,
-            content: agentRes.data,
+            content: responseContent,
+            images: responseImages,
             createdAt: new Date().toISOString(),
           };
           dispatch(addMessage(assistantMsg));

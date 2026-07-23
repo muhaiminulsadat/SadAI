@@ -206,6 +206,28 @@ export const ChatMessageItem: React.FC<ChatMessageItemProps> = ({
                 {message.content}
               </ReactMarkdown>
             )}
+            {!isUser && message.images && message.images.length > 0 && (
+              <div className="mt-3 grid grid-cols-2 sm:grid-cols-3 gap-2">
+                {message.images.map((imgUrl, idx) => (
+                  <a
+                    key={idx}
+                    href={imgUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group relative overflow-hidden rounded-xl border border-border/40 bg-muted/30 aspect-video flex items-center justify-center transition-transform duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.97] hover:border-primary/50"
+                  >
+                    <img
+                      src={imgUrl}
+                      alt={`Search result ${idx + 1}`}
+                      className="size-full object-cover transition-transform duration-300 group-hover:scale-105"
+                      onError={(e) => {
+                        (e.target as HTMLElement).style.display = "none";
+                      }}
+                    />
+                  </a>
+                ))}
+              </div>
+            )}
           </BubbleContent>
         </Bubble>
 

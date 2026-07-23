@@ -57,7 +57,7 @@ export const getConversations = async (req: Request, res: Response) => {
 
 export const saveMessage = async (req: Request, res: Response) => {
   try {
-    const { conversationId, role, content } = req.body || {};
+    const { conversationId, role, content, images } = req.body || {};
 
     if (!conversationId || !role || !content) {
       return res.status(400).json({
@@ -70,6 +70,7 @@ export const saveMessage = async (req: Request, res: Response) => {
       conversationId,
       role,
       content,
+      images: Array.isArray(images) ? images : [],
     });
     const conversation = await Conversation.findByIdAndUpdate(conversationId, {
       $push: { messages: message._id },

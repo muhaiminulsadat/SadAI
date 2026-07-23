@@ -7,5 +7,7 @@ export const AgentState = Annotation.Root({
   agent: Annotation<string>(),
   conversationId: Annotation<string>(),
   history: Annotation<Array<[string, string]>>(),
+  searchResult: Annotation<string>(),
+  images: Annotation<string[]>(),
 });
 

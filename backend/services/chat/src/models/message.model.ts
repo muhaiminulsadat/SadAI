@@ -9,6 +9,7 @@ const messageSchema = new mongoose.Schema(
     },
     role: {type: String, enum: ["user", "assistant"]},
     content: {type: String, required: true},
+    images: {type: [String], default: []},
   },
   {
     timestamps: true,

@@ -14,6 +14,7 @@ export interface ChatMessage {
   conversationId: string;
   role: "user" | "assistant" | "system";
   content: string;
+  images?: string[];
   createdAt?: string;
 }
 
@@ -46,6 +47,7 @@ export const chatService = {
     conversationId: string;
     role: "user" | "assistant";
     content: string;
+    images?: string[];
   }): Promise<ApiResponse<ChatMessage>> {
     const res = await api.post<ApiResponse<ChatMessage>>(
       "/chat/save-message",
@@ -77,8 +79,12 @@ export const chatService = {
   async sendAgentPrompt(data: {
     prompt: string;
     conversationId: string;
-  }): Promise<ApiResponse<string>> {
-    const res = await api.post<ApiResponse<string>>("/agent/chat", data);
+    agent?: string;
+    mode?: string;
+  }): Promise<ApiResponse<string | { aiResponse: string; images?: string[] }>> {
+    const res = await api.post<
+      ApiResponse<string | { aiResponse: string; images?: string[] }>
+    >("/agent/chat", data);
     return res.data;
   },
 };
